@@ -1,0 +1,51 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract CertificateVerification {
+    struct Certificate {
+        uint256 id;
+        string recipientName;
+        string title;
+        string issuer;
+        string metadata;
+        bool isRevoked;
+    }
+
+    mapping(uint256 => Certificate) public certificates;
+    uint256 public certificateCount;
+
+    event CertificateIssued(uint256 indexed id, string recipientName, string title, string issuer);
+    event CertificateRevoked(uint256 indexed id);
+
+    function issueCertificate(
+        string memory _recipientName,
+        string memory _title,
+        string memory _issuer,
+        string memory _metadata
+    ) public {
+        certificateCount++;
+        certificates[certificateCount] = Certificate(
+            certificateCount,
+            _recipientName,
+            _title,
+            _issuer,
+            _metadata,
+            false
+        );
+
+        emit CertificateIssued(certificateCount, _recipientName, _title, _issuer);
+    }
+
+    function verifyCertificate(uint256 _id) public view returns (bool) {
+        Certificate memory certificate = certificates[_id];
+        return !certificate.isRevoked;
+    }
+
+    function revokeCertificate(uint256 _id) public {
+        Certificate storage certificate = certificates[_id];
+        require(!certificate.isRevoked, "Certificate is already revoked");
+
+        certificate.isRevoked = true;
+        emit CertificateRevoked(_id);
+    }
+}
