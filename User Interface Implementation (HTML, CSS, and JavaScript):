@@ -1,0 +1,4 @@
+Create an HTML form for issuing certificates, including input fields for recipient name, title, issuer, and metadata.
+Add a button to submit the form and call the issueCertificate function on the smart contract using Web3.js.
+Create an HTML input field for entering the certificate ID or uploading the certificate file for verification.
+Implement a JavaScript function to call the verifyCertificate function on the smart contract using Web3.js and display the verification result.
